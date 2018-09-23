@@ -6,6 +6,7 @@ import debounce from 'debounce';
 import PropTypes from 'prop-types';
 import React, {Component, Fragment} from 'react';
 import config from '../../config';
+import SearchBox from '../../shared-components/SearchBox';
 
 function Movie ({movie, addToWatchList, removeFromWatchList, addToFavourites, removeFromFavourites}) {
     const addOrRemoveWatchList = movie.is_in_watch_list ? removeFromWatchList : addToWatchList;
@@ -90,12 +91,7 @@ class Home extends Component {
         const movies = this.state.movies.map(movie => this.mapMovieToUsableType(movie));
         return (
             <Fragment>
-                <div className="search">
-                    <input onChange={e => this.onSearch(e.target.value)}
-                           className="search__input"
-                           placeholder="Search"
-                           type="search"/>
-                </div>
+                <SearchBox onSearch={e => this.onSearch(e.target.value)} value={this.state.searchTerm}/>
                 <ul className="movies-list">
                     {movies.map(movie => <Movie key={movie.id}
                                                 movie={movie}
