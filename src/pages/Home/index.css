@@ -56,5 +56,20 @@
 }
 
 .load-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 0;
+}
 
+.load-more__button {
+    padding: 10px 20px;
+    background: #939393;
+    color: #747474;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.load-more__button:hover {
+    background: #838383;
 }
