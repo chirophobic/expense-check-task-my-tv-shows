@@ -11,48 +11,25 @@ class Home extends Component {
     }
 
     loadMovies () {
-        listMovies().then(movies => {
-            this.setState({movies: this.mapMoviesToUsableType(movies)});
-        });
+        listMovies().then(movies => this.setState({movies: movies}));
     }
 
-    addToWatchList (movie) {
-        this.props.watchList.add(movie);
-        this.setState({movies: this.mapMoviesToUsableType(this.state.movies)});
-    }
-
-    addToFavourites (movie) {
-        this.props.favourites.remove(movie);
-        this.setState({movies: this.mapMoviesToUsableType(this.state.movies)});
-    }
-
-    removeFromWatchList (movie) {
-        this.props.watchList.add(movie);
-        this.setState({movies: this.mapMoviesToUsableType(this.state.movies)});
-    }
-
-    removeFromFavourites (movie) {
-        this.props.favourites.remove(movie);
-        this.setState({movies: this.mapMoviesToUsableType(this.state.movies)});
-    }
-
-    mapMoviesToUsableType (movies) {
-        return movies.map(movie => {
-            return {
-                ...movie,
-                is_in_watch_list: this.props.watchList.contains(movie),
-                is_in_favourites: this.props.favourites.contains(movie),
-            };
-        });
+    mapMovieToUsableType (movie) {
+        return {
+            ...movie,
+            is_in_watch_list: this.props.watchList.contains(movie),
+            is_in_favourites: this.props.favourites.contains(movie),
+        };
     }
 
     render () {
+        const movies = this.state.movies.map(movie => this.mapMovieToUsableType(movie));
         return (
-            <MovieList movies={this.state.movies}
-                       addToWatchList={this.addToWatchList.bind(this)}
-                       removeFromWatchList={this.removeFromWatchList.bind(this)}
-                       addToFavourites={this.addToFavourites.bind(this)}
-                       removeFromFavourites={this.removeFromFavourites.bind(this)}/>
+            <MovieList movies={movies}
+                       addToWatchList={this.props.watchList.add}
+                       removeFromWatchList={this.props.watchList.remove}
+                       addToFavourites={this.props.favourites.add}
+                       removeFromFavourites={this.props.favourites.remove}/>
         );
     }
 }

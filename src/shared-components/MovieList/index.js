@@ -6,7 +6,9 @@ import React from 'react';
 import config from '../../config';
 import './index.css';
 
-function Movie ({movie, addToWatchList, addToFavourites}) {
+function Movie ({movie, addToWatchList, removeFromWatchList, addToFavourites, removeFromFavourites}) {
+    const addOrRemoveWatchList = movie.is_in_watch_list ? removeFromWatchList : addToWatchList;
+    const addOrRemoveFromFavourites = movie.is_in_favourites ? removeFromFavourites : addToFavourites;
     return (
         <li className="movie">
             <img className="movie__cover"
@@ -17,16 +19,16 @@ function Movie ({movie, addToWatchList, addToFavourites}) {
             <div className="movie__actions">
                 <div className="movie__actions__action"
                      title="Add to Watch List"
-                     onClick={() => addToWatchList(movie)}>
+                     onClick={() => addOrRemoveWatchList(movie)}>
                     <FontAwesomeIcon icon={movie.is_in_watch_list ? faTrashAlt : faPlus}/>
                 </div>
                 <div className="movie__actions__action"
                      title="Add to Favourites"
-                     onClick={() => addToFavourites(movie)}>
+                     onClick={() => addOrRemoveFromFavourites(movie)}>
                     <FontAwesomeIcon icon={movie.is_in_favourites ? faThumbsDown : faThumbsUp}/>
                 </div>
                 <div className="movie__actions__action" title="Watch Trailer">
-                    <FontAwesomeIcon icon={faYoutube} />
+                    <FontAwesomeIcon icon={faYoutube}/>
                 </div>
             </div>
         </li>

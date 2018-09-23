@@ -98,10 +98,10 @@ class App extends Component {
                                render={props => <Home {...props} {...helper}/>}/>
                         <Route exact
                                path="/watch-list"
-                               render={props => <WatchList {...props} {...helper}/>}/>
+                               render={props => <WatchList {...props} movies={this.state.watchList}/>}/>
                         <Route exact
                                path="/favourites"
-                               render={props => <Favourites {...props} {...helper}/>}/>
+                               render={props => <Favourites {...props} movies={this.state.favourites}/>}/>
                     </main>
                 </div>
             </Router>

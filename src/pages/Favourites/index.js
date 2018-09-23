@@ -1,9 +1,14 @@
 import React, {Component} from 'react';
+import MovieList from '../../shared-components/MovieList';
 
 class Favourites extends Component {
     render () {
         return (
-            <div>Hello! This is the Favourites page</div>
+            <MovieList movies={this.props.movies}
+                       addToWatchList={() => {}}
+                       addToFavourites={() => {}}
+                       removeFromFavourites={() => {}}
+                       removeFromWatchList={() => {}} />
         )
     }
 }
