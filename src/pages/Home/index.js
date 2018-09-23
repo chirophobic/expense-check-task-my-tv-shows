@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import React, {Component, Fragment} from 'react';
 import config from '../../config';
 import SearchBox from '../../shared-components/SearchBox';
+import './index.css';
 
 function Movie ({movie, addToWatchList, removeFromWatchList, addToFavourites, removeFromFavourites}) {
     const addOrRemoveWatchList = movie.is_in_watch_list ? removeFromWatchList : addToWatchList;
