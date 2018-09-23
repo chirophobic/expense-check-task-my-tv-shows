@@ -9,6 +9,7 @@ import config from '../../config';
 import SearchBox from '../../shared-components/SearchBox';
 import './index.css';
 import Spinner from '../../shared-components/Spinner';
+import ISO6391 from 'iso-639-1';
 
 function LoadMore ({onLoadMore}) {
     return (
@@ -21,13 +22,24 @@ function LoadMore ({onLoadMore}) {
 function Movie ({movie, addToWatchList, removeFromWatchList, addToFavourites, removeFromFavourites}) {
     const addOrRemoveWatchList = movie.is_in_watch_list ? removeFromWatchList : addToWatchList;
     const addOrRemoveFromFavourites = movie.is_in_favourites ? removeFromFavourites : addToFavourites;
+
+    const language = ISO6391.getName(movie.original_language);
+    const year = movie.first_air_date.slice(0, 4);
+
     return (
         <li className="movie">
             <img className="movie__cover"
                  src={`${config.imageBaseUrl}w300${movie.poster_path}`}
                  alt={movie.title}/>
-            <div className="movie__title">{movie.name}</div>
-            <div className="movie__rating">{movie.vote_average}</div>
+            <div className="movie__details">
+                <div className="movie__details__title">{movie.name} ({year})</div>
+                <div className="movie__details__rating">
+                    Rating: {movie.vote_average * 10}%
+                </div>
+                <div className="movie__details__tags">
+                    <span>{language}</span>
+                </div>
+            </div>
             <div className="movie__actions">
                 <div className="movie__actions__action"
                      title={movie.is_in_watch_list ? 'Remove from Watch List' : 'Add to Watch List'}

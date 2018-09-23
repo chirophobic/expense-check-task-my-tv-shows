@@ -26,6 +26,28 @@
     width: 300px;
 }
 
+.movie__details {
+    padding: 5px;
+}
+
+.movie__details__title {
+    font-size: 13pt;
+    text-align: center;
+}
+
+.movie__details__rating {
+    color: #747474;
+}
+
+.movie__details__tags > span {
+    font-size: 11px;
+    display: inline-block;
+    color: #a0a0a0;
+    border: 1px solid #a0a0a0;
+    padding: 2px 4px;
+    -webkit-border-radius: 5px;
+}
+
 .movie__actions {
     display: flex;
     flex-wrap: nowrap;
