@@ -7,7 +7,7 @@ function NavigationLinks ({watchCount, favouriteCount}) {
     const className = 'header__navigation__links';
     const activeClassName = 'header__navigation__links--active';
     return (
-        <div className="header__navigation">
+        <nav className="header__navigation">
             <NavLink className={className} exact={true} activeClassName={activeClassName} to="/">
                 Home
             </NavLink>
@@ -17,7 +17,7 @@ function NavigationLinks ({watchCount, favouriteCount}) {
             <NavLink className={className} exact={true} activeClassName={activeClassName} to="/favourites">
                 Favourites ({favouriteCount})
             </NavLink>
-        </div>
+        </nav>
     );
 }
 
