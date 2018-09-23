@@ -8,6 +8,15 @@ import React, {Component, Fragment} from 'react';
 import config from '../../config';
 import SearchBox from '../../shared-components/SearchBox';
 import './index.css';
+import Spinner from '../../shared-components/Spinner';
+
+function LoadMore ({onLoadMore}) {
+    return (
+        <div className="load-more">
+            <div onClick={onLoadMore} className="load-more__button">Load More</div>
+        </div>
+    );
+}
 
 function Movie ({movie, addToWatchList, removeFromWatchList, addToFavourites, removeFromFavourites}) {
     const addOrRemoveWatchList = movie.is_in_watch_list ? removeFromWatchList : addToWatchList;
@@ -42,21 +51,27 @@ class Home extends Component {
     constructor (props) {
         super(props);
         this.onSearch = debounce(this.onSearch, 300);
-        this.state = {movies: [], searchTerm: '', page: 1};
+        this.state = {movies: [], searchTerm: '', page: 1, isLoading: false};
         this.baseQueryParams = {
             'api_key': config.apiToken,
         };
+        // this.listMovies();
+    }
+
+    componentDidMount() {
         this.listMovies();
     }
 
     listMovies () {
         const params = {params: {...this.baseQueryParams, page: this.state.page}};
+        this.setState({isLoading: true});
         axios.get(`${config.apiBaseUrl}/discover/tv`, params)
              .then(response => this.handleApiSuccess(response));
     }
 
     searchMovies () {
         const options = {params: {...this.baseQueryParams, query: this.state.searchTerm, page: this.state.page}};
+        this.setState({isLoading: true});
         axios.get(`${config.apiBaseUrl}/search/tv`, options)
              .then(response => this.handleApiSuccess(response));
     }
@@ -77,7 +92,7 @@ class Home extends Component {
 
     handleApiSuccess (response) {
         console.log(response.data.results);
-        this.setState({movies: [...this.state.movies, ...response.data.results]});
+        this.setState({isLoading: false, movies: [...this.state.movies, ...response.data.results]});
     }
 
     mapMovieToUsableType (movie) {
@@ -101,9 +116,8 @@ class Home extends Component {
                                                 addToFavourites={this.props.favourites.add}
                                                 removeFromFavourites={this.props.favourites.remove}/>)}
                 </ul>
-                <div className="load-more">
-                    <div onClick={() => this.loadMore()} className="load-more__button">Load More</div>
-                </div>
+                {this.state.isLoading && <div style={{textAlign: 'center'}}><Spinner/></div>}
+                {!this.state.isLoading && <LoadMore onLoadMore={() => this.loadMore()}/>}
             </Fragment>
         );
     }
