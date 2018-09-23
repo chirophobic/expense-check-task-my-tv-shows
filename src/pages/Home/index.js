@@ -67,7 +67,6 @@ class Home extends Component {
         this.baseQueryParams = {
             'api_key': config.apiToken,
         };
-        // this.listMovies();
     }
 
     componentDidMount () {

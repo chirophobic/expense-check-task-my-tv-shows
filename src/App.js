@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, NavLink} from 'react-router-dom';
 import './App.css';
-import Favourites from './pages/Favourites';
+import FavouritesAndWatchList from './pages/FavouritesAndWatchList';
 import Home from './pages/Home';
-import WatchList from './pages/WatchList';
 
 function NavigationLinks ({watchCount, favouriteCount}) {
     const className = 'header__navigation__links';
@@ -98,10 +97,14 @@ class App extends Component {
                                render={props => <Home {...props} {...helper}/>}/>
                         <Route exact
                                path="/watch-list"
-                               render={props => <WatchList {...props} {...helper} movies={this.state.watchList}/>}/>
+                               render={props => <FavouritesAndWatchList {...props} {...helper}
+                                                                        movies={this.state.watchList}
+                                                                        type="watchList"/>}/>
                         <Route exact
                                path="/favourites"
-                               render={props => <Favourites {...props} {...helper} movies={this.state.favourites}/>}/>
+                               render={props => <FavouritesAndWatchList {...props} {...helper}
+                                                                        movies={this.state.favourites}
+                                                                        type="favourites"/>}/>
                     </main>
                 </div>
             </Router>
