@@ -30,12 +30,12 @@ function Movie ({movie, addToWatchList, removeFromWatchList, addToFavourites, re
             <div className="movie__rating">{movie.vote_average}</div>
             <div className="movie__actions">
                 <div className="movie__actions__action"
-                     title="Add to Watch List"
+                     title={movie.is_in_watch_list ? 'Remove from Watch List' : 'Add to Watch List'}
                      onClick={() => addOrRemoveWatchList(movie)}>
                     <FontAwesomeIcon icon={movie.is_in_watch_list ? faTrashAlt : faPlus}/>
                 </div>
                 <div className="movie__actions__action"
-                     title="Add to Favourites"
+                     title={movie.is_in_favourites ? 'Remove from Favourites' : 'Add to Favourites'}
                      onClick={() => addOrRemoveFromFavourites(movie)}>
                     <FontAwesomeIcon icon={movie.is_in_favourites ? faThumbsDown : faThumbsUp}/>
                 </div>
