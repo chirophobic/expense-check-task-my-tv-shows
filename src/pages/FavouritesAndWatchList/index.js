@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types';
 import React, {Component, Fragment} from 'react';
 import SearchBox from '../../shared-components/SearchBox';
 import './index.css';
@@ -9,14 +10,6 @@ class FavouritesAndWatchList extends Component {
         this.state = {search: ''};
     }
 
-    mapMovieToUsableType (movie) {
-        return {
-            ...movie,
-            is_in_watch_list: this.props.watchList.contains(movie),
-            is_in_favourites: this.props.favourites.contains(movie),
-        };
-    }
-
     onSearch (event) {
         this.setState({search: event.target.value});
     }
@@ -26,19 +19,24 @@ class FavouritesAndWatchList extends Component {
     }
 
     render () {
-        const movies = this.props.movies
-                           .map(movie => this.mapMovieToUsableType(movie))
-                           .filter(movie => !this.state.search || this.matchesSearch(movie));
+        const movies = this.props.movies.filter(movie => !this.state.search || this.matchesSearch(movie));
         return (
             <Fragment>
                 <SearchBox onSearch={e => this.onSearch(e)}/>
                 {!movies.length && <div style={{textAlign: 'center'}}>There are no shows in this list.</div>}
                 <ul className="liked-shows">
-                    {movies.map(movie => <ShowDetails key={movie.id} movie={movie}/>)}
+                    {movies.map(movie => <ShowDetails key={movie.id} movie={movie} {...this.props}/>)}
                 </ul>
             </Fragment>
         );
     }
 }
+
+FavouritesAndWatchList.propTypes = {
+    movies: PropTypes.array,
+    removeFromList: PropTypes.func,
+    removeIcon: PropTypes.element,
+    removeLabel: PropTypes.string,
+};
 
 export default FavouritesAndWatchList;

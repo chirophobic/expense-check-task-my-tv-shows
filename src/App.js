@@ -1,5 +1,6 @@
+import {faThumbsDown, faTrashAlt} from '@fortawesome/free-regular-svg-icons';
 import React, {Component} from 'react';
-import {BrowserRouter as Router, Route, NavLink} from 'react-router-dom';
+import {BrowserRouter as Router, NavLink, Route} from 'react-router-dom';
 import './App.css';
 import FavouritesAndWatchList from './pages/FavouritesAndWatchList';
 import Home from './pages/Home';
@@ -62,17 +63,8 @@ class App extends Component {
         App.saveToLocalStorage('movies.favourites', this.state.favourites);
     }
 
-    static saveToLocalStorage (key, value) {
-        window.localStorage.setItem(key, JSON.stringify(value));
-    }
-
-    static loadFromLocalStorage (key, defaultValue) {
-        const storageItem = window.localStorage.getItem(key);
-        return !!storageItem ? JSON.parse(storageItem) : defaultValue;
-    }
-
-    render () {
-        const helper = {
+    getHelpers () {
+        return {
             watchList: {
                 add: movie => this.addToList('watchList', movie),
                 remove: movie => this.removeFromList('watchList', movie),
@@ -84,6 +76,29 @@ class App extends Component {
                 contains: movie => this.existsInList('favourites', movie),
             },
         };
+    }
+
+    renderWatchList (props) {
+        return (
+            <FavouritesAndWatchList {...props}
+                                    movies={this.state.watchList}
+                                    removeFromList={movie => this.removeFromList('watchList', movie)}
+                                    removeIcon={faTrashAlt}
+                                    removeLabel="Remove from Watch List"/>
+        );
+    }
+
+    renderFavourites (props) {
+        return (
+            <FavouritesAndWatchList {...props}
+                                    movies={this.state.favourites}
+                                    removeFromList={movie => this.removeFromList('favourites', movie)}
+                                    removeIcon={faThumbsDown}
+                                    removeLabel="Remove from Favourites"/>
+        );
+    }
+
+    render () {
         return (
             <Router>
                 <div className="app">
@@ -92,23 +107,22 @@ class App extends Component {
                         <NavigationLinks watchCount={this.watchListCount} favouriteCount={this.favouritesCount}/>
                     </header>
                     <main className="main-content">
-                        <Route exact
-                               path="/"
-                               render={props => <Home {...props} {...helper}/>}/>
-                        <Route exact
-                               path="/watch-list"
-                               render={props => <FavouritesAndWatchList {...props} {...helper}
-                                                                        movies={this.state.watchList}
-                                                                        type="watchList"/>}/>
-                        <Route exact
-                               path="/favourites"
-                               render={props => <FavouritesAndWatchList {...props} {...helper}
-                                                                        movies={this.state.favourites}
-                                                                        type="favourites"/>}/>
+                        <Route exact path="/" render={props => <Home {...props} {...this.getHelpers()}/>}/>
+                        <Route exact path="/watch-list" render={props => this.renderWatchList(props)}/>
+                        <Route exact path="/favourites" render={props => this.renderFavourites(props)}/>
                     </main>
                 </div>
             </Router>
         );
+    }
+
+    static saveToLocalStorage (key, value) {
+        window.localStorage.setItem(key, JSON.stringify(value));
+    }
+
+    static loadFromLocalStorage (key, defaultValue) {
+        const storageItem = window.localStorage.getItem(key);
+        return !!storageItem ? JSON.parse(storageItem) : defaultValue;
     }
 }
 
