@@ -1,7 +1,9 @@
-import React, {Component, Fragment} from 'react';
+import React, {Component} from 'react';
 import {BrowserRouter as Router, Route, NavLink} from 'react-router-dom';
 import './App.css';
-import routes from './routes';
+import Favourites from './pages/Favourites';
+import Home from './pages/Home';
+import WatchList from './pages/WatchList';
 
 function NavigationLinks ({watchCount, favouriteCount}) {
     const className = 'header__navigation__links';
@@ -29,8 +31,10 @@ class App extends Component {
             favourites: App.loadFromLocalStorage('movies.favourites', []),
         };
 
-        this.addToFavourites = movie => this.addToList('watchList', movie);
+        this.addToFavourites = movie => this.addToList('favourites', movie);
         this.addToWatchList = movie => this.addToList('watchList', movie);
+        this.addToWatchList.bind(this);
+        this.addToFavourites.bind(this);
     }
 
     get watchListCount () {
@@ -38,7 +42,7 @@ class App extends Component {
     }
 
     get favouritesCount () {
-        return this.state.watchList.length;
+        return this.state.favourites.length;
     }
 
     removeFromList (listName, movieToRemove) {
@@ -48,6 +52,10 @@ class App extends Component {
     addToList (listName, movieToAdd) {
         this.setState({[listName]: [...this.state[listName], movieToAdd]});
         this.updateLocalStorageFromState();
+    }
+
+    existsInList (listName, movieToCheck) {
+        return this.state[listName].some(movie => movie.id === movieToCheck.id);
     }
 
     updateLocalStorageFromState () {
@@ -64,11 +72,19 @@ class App extends Component {
         return !!storageItem ? JSON.parse(storageItem) : defaultValue;
     }
 
-    static renderRoute (route) {
-        return <Route exact={!!route.exact} path={route.path} component={route.component} key={route.path}/>;
-    }
-
     render () {
+        const helper = {
+            watchList: {
+                add: movie => this.addToList('watchList', movie),
+                remove: movie => this.removeFromList('watchList', movie),
+                contains: movie => this.existsInList('watchList', movie),
+            },
+            favourites: {
+                add: movie => this.addToList('favourites', movie),
+                remove: movie => this.removeFromList('favourites', movie),
+                contains: movie => this.existsInList('favourites', movie),
+            },
+        };
         return (
             <Router>
                 <div className="app">
@@ -77,7 +93,15 @@ class App extends Component {
                         <NavigationLinks watchCount={this.watchListCount} favouriteCount={this.favouritesCount}/>
                     </header>
                     <main className="main-content">
-                        {routes.map(App.renderRoute)}
+                        <Route exact
+                               path="/"
+                               render={props => <Home {...props} {...helper}/>}/>
+                        <Route exact
+                               path="/watch-list"
+                               render={props => <WatchList {...props} {...helper}/>}/>
+                        <Route exact
+                               path="/favourites"
+                               render={props => <Favourites {...props} {...helper}/>}/>
                     </main>
                 </div>
             </Router>
