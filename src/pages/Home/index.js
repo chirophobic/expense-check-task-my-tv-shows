@@ -58,7 +58,7 @@ class Home extends Component {
         // this.listMovies();
     }
 
-    componentDidMount() {
+    componentDidMount () {
         this.listMovies();
     }
 
@@ -107,7 +107,7 @@ class Home extends Component {
         const movies = this.state.movies.map(movie => this.mapMovieToUsableType(movie));
         return (
             <Fragment>
-                <SearchBox onSearch={e => this.onSearch(e.target.value)} value={this.state.searchTerm}/>
+                <SearchBox onSearch={e => this.onSearch(e.target.value)}/>
                 <ul className="movies-list">
                     {movies.map(movie => <Movie key={movie.id}
                                                 movie={movie}
