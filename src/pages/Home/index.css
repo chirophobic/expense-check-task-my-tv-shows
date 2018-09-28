@@ -11,7 +11,7 @@
 
 .movie {
     display: block;
-    width: 300px;
+    width: 250px;
     margin: 10px;
     background: white;
     border: 2px solid #b1b1b1;
@@ -23,7 +23,7 @@
     display: block;
     box-sizing: border-box;
     padding: 5px;
-    width: 300px;
+    width: 250px;
 }
 
 .movie__details {
