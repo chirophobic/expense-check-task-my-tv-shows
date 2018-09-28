@@ -1,3 +1,22 @@
 .similar-shows__header {
     font-size: 14pt;
 }
+
+.similar-shows__list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    overflow-y: hidden;
+    overflow-x: scroll;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: stretch;
+}
+
+.similar-shows__list__show {
+    width: 200px;
+    flex-grow: 0;
+    flex-shrink: 0;
+    margin: 5px;
+}
