@@ -6,6 +6,7 @@ import debounce from 'debounce';
 import PropTypes from 'prop-types';
 import React, {Component, Fragment} from 'react';
 import config from '../../config';
+import PosterImage from '../../shared-components/PosterImage';
 import SearchBox from '../../shared-components/SearchBox';
 import './index.css';
 import Spinner from '../../shared-components/Spinner';
@@ -28,9 +29,9 @@ function Movie ({movie, addToWatchList, removeFromWatchList, addToFavourites, re
 
     return (
         <li className="movie">
-            <img className="movie__cover"
-                 src={`${config.imageBaseUrl}w300${movie.poster_path}`}
-                 alt={movie.title}/>
+            <div className="movie__cover">
+                <PosterImage alt={movie.name} path={movie.poster_path} width={300}/>
+            </div>
             <div className="movie__details">
                 <div className="movie__details__title">{movie.name} ({year})</div>
                 <div className="movie__details__rating">
@@ -77,14 +78,14 @@ class Home extends Component {
         const params = {params: {...this.baseQueryParams, page: this.state.page}};
         this.setState({isLoading: true});
         axios.get(`${config.apiBaseUrl}/discover/tv`, params)
-             .then(response => this.handleApiSuccess(response));
+            .then(response => this.handleApiSuccess(response));
     }
 
     searchMovies () {
         const options = {params: {...this.baseQueryParams, query: this.state.searchTerm, page: this.state.page}};
         this.setState({isLoading: true});
         axios.get(`${config.apiBaseUrl}/search/tv`, options)
-             .then(response => this.handleApiSuccess(response));
+            .then(response => this.handleApiSuccess(response));
     }
 
     loadMore () {
