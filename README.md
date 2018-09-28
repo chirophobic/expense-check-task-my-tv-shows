@@ -1,6 +1,6 @@
-Expense Check Task: My TV Shows
+Interview task: My TV Shows
 ===
-> The programming task for Expense Check
+> Building a TV show list with favourites and watch-list
 
 ## Getting started
 
