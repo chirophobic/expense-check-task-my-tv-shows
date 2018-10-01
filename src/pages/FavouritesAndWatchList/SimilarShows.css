@@ -14,9 +14,22 @@
     align-items: stretch;
 }
 
-.similar-shows__list__show {
+.similar-shows__list__show,
+.similar-shows__list__load-more {
     width: 200px;
     flex-grow: 0;
     flex-shrink: 0;
     margin: 5px;
+}
+
+.similar-shows__list__load-more {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+}
+
+.similar-shows__list__load-more:hover {
+    background: lightgrey;
+    color: grey;
 }
