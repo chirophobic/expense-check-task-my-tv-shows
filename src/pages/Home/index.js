@@ -1,16 +1,15 @@
 import {faYoutube} from '@fortawesome/free-brands-svg-icons';
 import {faPlus, faThumbsDown, faThumbsUp, faTrashAlt} from '@fortawesome/free-solid-svg-icons';
 import {FontAwesomeIcon} from '@fortawesome/react-fontawesome';
-import axios from 'axios';
 import debounce from 'debounce';
+import ISO6391 from 'iso-639-1';
 import PropTypes from 'prop-types';
 import React, {Component, Fragment} from 'react';
-import config from '../../config';
 import PosterImage from '../../shared-components/PosterImage';
 import SearchBox from '../../shared-components/SearchBox';
-import './index.css';
 import Spinner from '../../shared-components/Spinner';
-import ISO6391 from 'iso-639-1';
+import Cursor from '../../utils/cursor';
+import './index.css';
 
 function LoadMore ({onLoadMore}) {
     return (
@@ -64,47 +63,37 @@ class Home extends Component {
     constructor (props) {
         super(props);
         this.onSearch = debounce(this.onSearch, 300);
-        this.state = {movies: [], searchTerm: '', page: 1, isLoading: false};
-        this.baseQueryParams = {
-            'api_key': config.apiToken,
+        this.urls = {search: '/search/tv', list: '/discover/tv'};
+        this.state = {
+            movies: [],
+            searchTerm: '',
+            isLoading: false,
+            cursor: new Cursor(this.urls.list),
         };
     }
 
     componentDidMount () {
-        this.listMovies();
-    }
-
-    listMovies () {
-        const params = {params: {...this.baseQueryParams, page: this.state.page}};
-        this.setState({isLoading: true});
-        axios.get(`${config.apiBaseUrl}/discover/tv`, params)
-            .then(response => this.handleApiSuccess(response));
-    }
-
-    searchMovies () {
-        const options = {params: {...this.baseQueryParams, query: this.state.searchTerm, page: this.state.page}};
-        this.setState({isLoading: true});
-        axios.get(`${config.apiBaseUrl}/search/tv`, options)
-            .then(response => this.handleApiSuccess(response));
+        this.loadMore();
     }
 
     loadMore () {
-        this.setState({page: this.state.page + 1}, () => {
-            if (this.state.searchTerm) {
-                this.searchMovies();
-            } else {
-                this.listMovies();
-            }
+        this.setState({isLoading: true}, () => {
+            this.state.cursor.nextPage().then(shows => this.handleApiSuccess(shows));
         });
     }
 
     onSearch (searchTerm) {
-        this.setState({searchTerm, movies: [], page: 1}, this.loadMore);
+        const newSearchCursor = new Cursor(this.urls.search, {query: searchTerm});
+        const newDefaultCursor = new Cursor(this.urls.list);
+        this.setState({
+            searchTerm,
+            movies: [],
+            cursor: searchTerm ? newSearchCursor : newDefaultCursor,
+        }, this.loadMore);
     }
 
-    handleApiSuccess (response) {
-        console.log(response.data.results);
-        this.setState({isLoading: false, movies: [...this.state.movies, ...response.data.results]});
+    handleApiSuccess (shows) {
+        this.setState({isLoading: false, movies: [...this.state.movies, ...shows]});
     }
 
     mapMovieToUsableType (movie) {
